@@ -1,21 +1,18 @@
 package fr.epsi.jconte.p2pChatSpring.controller.front;
 
+import fr.epsi.jconte.p2pChatSpring.dto.NetworkAndAdressChoice;
 import fr.epsi.jconte.p2pChatSpring.dto.OnlineMessage;
 import fr.epsi.jconte.p2pChatSpring.dto.PersonneWithIpAdress;
 import fr.epsi.jconte.p2pChatSpring.model.Personne;
 import fr.epsi.jconte.p2pChatSpring.repository.PersonneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
+import java.net.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +23,30 @@ public class ScanningOnlineController {
     @Autowired
     private PersonneRepository personneRepository;
 
-    @GetMapping
-    public List<PersonneWithIpAdress> scan() {
+    @PostMapping
+    public List<PersonneWithIpAdress> scan(@RequestBody NetworkAndAdressChoice networkAndAdressChoice) throws SocketException, UnknownHostException {
         List<PersonneWithIpAdress> personnes = new ArrayList<>();
+        InetAddress myInetAddress = InetAddress.getLocalHost();
+        Enumeration<NetworkInterface> networkInterfaceEnumeration = NetworkInterface.getNetworkInterfaces();
+        while (networkInterfaceEnumeration.hasMoreElements()) {
+            NetworkInterface networkInterface = networkInterfaceEnumeration.nextElement();
+            if (!networkInterface.getDisplayName().equals(networkAndAdressChoice.getNetworkName())) {
+                continue;
+            }
 
-        List<InetAddress> inetAddresses = getNetworkIPs(8080);
+            Enumeration<InetAddress> inetAddressEnumeration = networkInterface.getInetAddresses();
+
+            while (inetAddressEnumeration.hasMoreElements()) {
+                InetAddress inetAddress = inetAddressEnumeration.nextElement();
+                if (!inetAddress.getHostAddress().equals(networkAndAdressChoice.getIpAddress())) {
+                    continue;
+                }
+
+                myInetAddress = inetAddress;
+            }
+        }
+
+        List<InetAddress> inetAddresses = getNetworkIPs(8080, myInetAddress);
 
         for (InetAddress inetAddress : inetAddresses) {
 
@@ -60,13 +76,15 @@ public class ScanningOnlineController {
         return personnes;
     }
 
-    public List<InetAddress> getNetworkIPs(final int port) {
+    public List<InetAddress> getNetworkIPs(final int port, InetAddress myIp) throws SocketException {
+
         final List<InetAddress> inetAddresses = new ArrayList<>();
         final byte[] ip;
-        final InetAddress myIp;
+        //final InetAddress myIp;
         try {
-            ip = InetAddress.getLocalHost().getAddress();
-            myIp = InetAddress.getLocalHost();
+            //ip = InetAddress.getLocalHost().getAddress();
+            ip = myIp.getAddress();
+            //myIp = InetAddress.getLocalHost();
         } catch (Exception e) {
             return inetAddresses;     // exit method, otherwise "ip might not have been initialized"
         }
@@ -83,8 +101,8 @@ public class ScanningOnlineController {
                         InetAddress address = InetAddress.getByAddress(ip);
 
                         // If my ip address I ignore it
-                        //if (address.equals(myIp))
-                        //    return;
+                        if (address.equals(myIp))
+                            return;
 
                         try {
                             SocketAddress sockaddr = new InetSocketAddress(address, port);
