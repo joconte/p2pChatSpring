@@ -29,9 +29,15 @@ public class NetworkInterfaceController {
             Enumeration<InetAddress> inetAddressEnumeration = networkInterface.getInetAddresses();
             while (inetAddressEnumeration.hasMoreElements()) {
                 InetAddress inetAddress = inetAddressEnumeration.nextElement();
+                if (!inetAddress.getHostAddress().contains(".")) {
+                    continue;
+                }
                 adresses.add(inetAddress.getHostAddress());
             }
             networkAndAdress.setAddresses(adresses);
+            if (networkAndAdress.getAddresses().isEmpty()) {
+                continue;
+            }
             networkAndAdresses.add(networkAndAdress);
         }
         return networkAndAdresses;
