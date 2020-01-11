@@ -27,7 +27,6 @@ class P2pChatSpringApplicationTests {
 		DecryptService decryptService = new DecryptService();
 		EncryptService encryptService = new EncryptService();
 		SignService signService = new SignService();
-		GenerateKeyPair generateKeyPair = new GenerateKeyPair();
 		VerifyService verifyService = new VerifyService();
 
 		//First generate a public/private key pair
