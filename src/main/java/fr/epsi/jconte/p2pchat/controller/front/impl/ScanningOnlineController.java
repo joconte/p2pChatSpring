@@ -76,7 +76,7 @@ public class ScanningOnlineController implements IScanningOnlineController {
         return personnes;
     }
 
-    public List<InetAddress> getNetworkIPs(final int port, InetAddress myIp) throws SocketException {
+    private List<InetAddress> getNetworkIPs(final int port, InetAddress myIp) throws SocketException {
 
         final List<InetAddress> inetAddresses = new ArrayList<>();
         final byte[] ip;

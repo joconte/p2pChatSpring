@@ -8,7 +8,7 @@ import fr.epsi.jconte.p2pchat.model.Message;
 import fr.epsi.jconte.p2pchat.model.Personne;
 import fr.epsi.jconte.p2pchat.repository.MessageRepository;
 import fr.epsi.jconte.p2pchat.repository.PersonneRepository;
-import fr.epsi.jconte.p2pchat.service.impl.*;
+import fr.epsi.jconte.p2pchat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,19 +21,19 @@ import java.util.Optional;
 public class SendMessageController implements ISendMessageController {
 
     @Autowired
-    private SignService signService;
+    private ISignService signService;
 
     @Autowired
-    private GetPrivateKeyService getPrivateKeyService;
+    private IGetPrivateKeyService getPrivateKeyService;
 
     @Autowired
-    private GetPublicKeyService getPublicKeyService;
+    private IGetPublicKeyService getPublicKeyService;
 
     @Autowired
-    private EncryptService encryptService;
+    private IEncryptService encryptService;
 
     @Autowired
-    private PublicKeyConversionService publicKeyConversionService;
+    private IPublicKeyConversionService publicKeyConversionService;
 
     @Autowired
     private PersonneRepository personneRepository;

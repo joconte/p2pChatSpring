@@ -6,8 +6,8 @@ import fr.epsi.jconte.p2pchat.model.Message;
 import fr.epsi.jconte.p2pchat.model.Personne;
 import fr.epsi.jconte.p2pchat.repository.MessageRepository;
 import fr.epsi.jconte.p2pchat.repository.PersonneRepository;
-import fr.epsi.jconte.p2pchat.service.impl.PublicKeyConversionService;
-import fr.epsi.jconte.p2pchat.service.impl.VerifyService;
+import fr.epsi.jconte.p2pchat.service.IPublicKeyConversionService;
+import fr.epsi.jconte.p2pchat.service.IVerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +19,7 @@ import java.util.Optional;
 public class ReceiveMessageController implements IReceiveMessageController {
 
     @Autowired
-    private VerifyService verifyService;
+    private IVerifyService verifyService;
 
     @Autowired
     private PersonneRepository personneRepository;
@@ -28,7 +28,7 @@ public class ReceiveMessageController implements IReceiveMessageController {
     private MessageRepository messageRepository;
 
     @Autowired
-    private PublicKeyConversionService publicKeyConversionService;
+    private IPublicKeyConversionService publicKeyConversionService;
 
     @Override
     public void receiveMessage(@RequestBody IncomingMessage incomingMessage) throws Exception {

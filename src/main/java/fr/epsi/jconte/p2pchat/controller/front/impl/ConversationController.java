@@ -3,8 +3,8 @@ package fr.epsi.jconte.p2pchat.controller.front.impl;
 import fr.epsi.jconte.p2pchat.controller.front.IConversationController;
 import fr.epsi.jconte.p2pchat.model.Message;
 import fr.epsi.jconte.p2pchat.repository.MessageRepository;
-import fr.epsi.jconte.p2pchat.service.impl.DecryptService;
-import fr.epsi.jconte.p2pchat.service.impl.GetPrivateKeyService;
+import fr.epsi.jconte.p2pchat.service.IDecryptService;
+import fr.epsi.jconte.p2pchat.service.IGetPrivateKeyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +19,10 @@ public class ConversationController implements IConversationController {
     private MessageRepository messageRepository;
 
     @Autowired
-    private DecryptService decryptService;
+    private IDecryptService decryptService;
 
     @Autowired
-    private GetPrivateKeyService getPrivateKeyService;
+    private IGetPrivateKeyService getPrivateKeyService;
 
     @Override
     public List<Message> getCleanMessageFromPersonne(@PathVariable Long idPersonne) throws Exception {

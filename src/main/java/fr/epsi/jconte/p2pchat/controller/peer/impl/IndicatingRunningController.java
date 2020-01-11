@@ -3,10 +3,10 @@ package fr.epsi.jconte.p2pchat.controller.peer.impl;
 import fr.epsi.jconte.p2pchat.controller.peer.IIndicatingRunningController;
 import fr.epsi.jconte.p2pchat.dto.OnlineMessage;
 import fr.epsi.jconte.p2pchat.dto.Signature;
-import fr.epsi.jconte.p2pchat.service.impl.GetPrivateKeyService;
-import fr.epsi.jconte.p2pchat.service.impl.GetPublicKeyService;
-import fr.epsi.jconte.p2pchat.service.impl.PublicKeyConversionService;
-import fr.epsi.jconte.p2pchat.service.impl.SignService;
+import fr.epsi.jconte.p2pchat.service.IGetPrivateKeyService;
+import fr.epsi.jconte.p2pchat.service.IGetPublicKeyService;
+import fr.epsi.jconte.p2pchat.service.IPublicKeyConversionService;
+import fr.epsi.jconte.p2pchat.service.ISignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class IndicatingRunningController implements IIndicatingRunningController {
 
     @Autowired
-    private SignService signService;
+    private ISignService signService;
 
     @Autowired
-    private GetPrivateKeyService getPrivateKeyService;
+    private IGetPrivateKeyService getPrivateKeyService;
 
     @Autowired
-    private GetPublicKeyService getPublicKeyService;
+    private IGetPublicKeyService getPublicKeyService;
 
     @Autowired
-    private PublicKeyConversionService publicKeyConversionService;
+    private IPublicKeyConversionService publicKeyConversionService;
 
     @Override
     public OnlineMessage online() throws Exception {
