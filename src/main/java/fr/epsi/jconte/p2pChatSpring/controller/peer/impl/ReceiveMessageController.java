@@ -1,5 +1,6 @@
-package fr.epsi.jconte.p2pChatSpring.controller.peer;
+package fr.epsi.jconte.p2pChatSpring.controller.peer.impl;
 
+import fr.epsi.jconte.p2pChatSpring.controller.peer.ReceiveMessageApi;
 import fr.epsi.jconte.p2pChatSpring.dto.IncomingMessage;
 import fr.epsi.jconte.p2pChatSpring.model.Message;
 import fr.epsi.jconte.p2pChatSpring.model.Personne;
@@ -7,26 +8,14 @@ import fr.epsi.jconte.p2pChatSpring.repository.MessageRepository;
 import fr.epsi.jconte.p2pChatSpring.repository.PersonneRepository;
 import fr.epsi.jconte.p2pChatSpring.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/chat/receive")
-public class ReceiveMessageController {
-
-    @Autowired
-    private GetPrivateKeyService getPrivateKeyService;
-
-    @Autowired
-    private DecryptService decryptService;
-
-    @Autowired
-    private EncryptService encryptService;
+public class ReceiveMessageController implements ReceiveMessageApi {
 
     @Autowired
     private VerifyService verifyService;
@@ -40,7 +29,7 @@ public class ReceiveMessageController {
     @Autowired
     private PublicKeyConversion publicKeyConversion;
 
-    @PostMapping
+    @Override
     public void receiveMessage(@RequestBody IncomingMessage incomingMessage) throws Exception {
 
         if (!verifyService.verifyString(incomingMessage.getSignature().getPlainText(), incomingMessage.getSignature().getSignedText(), publicKeyConversion.getPublicKey(incomingMessage.getPublicKeyBase64()))) {

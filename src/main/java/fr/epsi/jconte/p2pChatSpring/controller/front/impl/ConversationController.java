@@ -26,12 +26,6 @@ public class ConversationController implements ConversationApi {
     @Autowired
     private GetPrivateKeyService getPrivateKeyService;
 
-    @Autowired
-    private PersonneRepository personneRepository;
-
-    @Autowired
-    private PublicKeyConversion publicKeyConversion;
-
     @Override
     public List<Message> getCleanMessageFromPersonne(@PathVariable Long idPersonne) throws Exception {
 

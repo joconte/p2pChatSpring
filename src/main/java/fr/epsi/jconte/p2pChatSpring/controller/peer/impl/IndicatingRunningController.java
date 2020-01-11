@@ -1,5 +1,6 @@
-package fr.epsi.jconte.p2pChatSpring.controller.peer;
+package fr.epsi.jconte.p2pChatSpring.controller.peer.impl;
 
+import fr.epsi.jconte.p2pChatSpring.controller.peer.IndicatingRunningApi;
 import fr.epsi.jconte.p2pChatSpring.dto.OnlineMessage;
 import fr.epsi.jconte.p2pChatSpring.dto.Signature;
 import fr.epsi.jconte.p2pChatSpring.service.GetPrivateKeyService;
@@ -7,13 +8,10 @@ import fr.epsi.jconte.p2pChatSpring.service.GetPublicKeyService;
 import fr.epsi.jconte.p2pChatSpring.service.PublicKeyConversion;
 import fr.epsi.jconte.p2pChatSpring.service.SignService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/chat/online")
-public class IndicatingRunningController {
+public class IndicatingRunningController implements IndicatingRunningApi {
 
     @Autowired
     private SignService signService;
@@ -27,7 +25,7 @@ public class IndicatingRunningController {
     @Autowired
     private PublicKeyConversion publicKeyConversion;
 
-    @GetMapping
+    @Override
     public OnlineMessage online() throws Exception {
 
         String signedMessage = signService.signString("online", getPrivateKeyService.getPrivateKeyFromResource("secret.key"));
