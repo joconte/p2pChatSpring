@@ -104,10 +104,9 @@ public class ScanningOnlineController implements ScanningOnlineApi {
                         //if (address.equals(myIp))
                         //    return;
 
-                        try {
+                        try (Socket sock = new Socket();) {
                             SocketAddress sockaddr = new InetSocketAddress(address, port);
                             // Create an unbound socket
-                            Socket sock = new Socket();
 
                             // This method will block no more than timeoutMs.
                             // If the timeout occurs, SocketTimeoutException is thrown.
