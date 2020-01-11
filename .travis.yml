@@ -1,0 +1,8 @@
+addons:
+  sonarcloud:
+    organization: "joconte"
+    token:
+      secure: "2EfTRh4gkrIqm+6Q/1Rh/zzjf+QfndQyJ0ETXAohbmmvN8DI3q+nX9eXSGUfWEm5B1peW50i/yNpc5eLzF1CfJtHBnvehAyLM9l+KvulfTSmxkQ2/dsQdWg3FQLYtFvX5YUGI+1pCtTpft7jqvm3HSFFAe3ClAcknzfXjBTqUZnQ3TS9zIUBhH9+orXvXhTr4SgvT7SjMaW/qaqzpepAfxc2VWVVr6m0l86ZmDsBjFW+FIghvtMgV5/LkP7m3RVTGXdhck/VqHqXroXpLDyPC2coMEn9C3gv8s4SfdhVk059b9pBeQsd48xNyfz33pFvLrUMjb5Kgqu12Ymrtl75Y1ZTJndoM4++XxNJMQmVnWO7FrYeO546akUeK6J13fjqqqYAJBGeISQ8ZdnUwgM0p86nLKxAABP0oJcZx2SsLoE3mFcNm2E6BPHqjCnHKqceRxTT1k7QKzbVSb0jJmTTQxQBKfM/j2qNZz1wi3+JPoZxLIvfgA2O9V8+PbAUh8zJXY4PM1vC7heA6m73X4y2pFYQAJEWL+p0ci+aNTHFrvHGqh4PqLkouCw2bDVPGFq4ThugcRB0qXuxsux7mP+vJcvajfrnstS2O1KV8icS9vYqHOPCDqoMUFLVg6ocZ/t9b7vIV+1S7W/0+Jz8Z3XeyI88+U9DQGk71i4Hjf4xVlU="
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=joconte_p2pChatSpring
