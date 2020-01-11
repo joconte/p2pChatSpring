@@ -1,5 +1,6 @@
-package fr.epsi.jconte.p2pChatSpring.controller.front;
+package fr.epsi.jconte.p2pChatSpring.controller.front.impl;
 
+import fr.epsi.jconte.p2pChatSpring.controller.front.ConversationApi;
 import fr.epsi.jconte.p2pChatSpring.model.Message;
 import fr.epsi.jconte.p2pChatSpring.repository.MessageRepository;
 import fr.epsi.jconte.p2pChatSpring.repository.PersonneRepository;
@@ -7,17 +8,14 @@ import fr.epsi.jconte.p2pChatSpring.service.DecryptService;
 import fr.epsi.jconte.p2pChatSpring.service.GetPrivateKeyService;
 import fr.epsi.jconte.p2pChatSpring.service.PublicKeyConversion;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/chat/conversation")
-public class ConversationController {
+public class ConversationController implements ConversationApi {
 
     @Autowired
     private MessageRepository messageRepository;
@@ -34,8 +32,7 @@ public class ConversationController {
     @Autowired
     private PublicKeyConversion publicKeyConversion;
 
-    @GetMapping
-    @RequestMapping("{idPersonne}")
+    @Override
     public List<Message> getCleanMessageFromPersonne(@PathVariable Long idPersonne) throws Exception {
 
         List<Message> cleanMessages = new ArrayList<>();

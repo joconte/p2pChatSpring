@@ -1,5 +1,6 @@
-package fr.epsi.jconte.p2pChatSpring.controller.front;
+package fr.epsi.jconte.p2pChatSpring.controller.front.impl;
 
+import fr.epsi.jconte.p2pChatSpring.controller.front.SendMessageApi;
 import fr.epsi.jconte.p2pChatSpring.dto.IncomingMessage;
 import fr.epsi.jconte.p2pChatSpring.dto.SendMessageFrontToBack;
 import fr.epsi.jconte.p2pChatSpring.dto.Signature;
@@ -9,9 +10,7 @@ import fr.epsi.jconte.p2pChatSpring.repository.MessageRepository;
 import fr.epsi.jconte.p2pChatSpring.repository.PersonneRepository;
 import fr.epsi.jconte.p2pChatSpring.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,8 +18,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/chat/send")
-public class SendMessageController {
+public class SendMessageController implements SendMessageApi {
 
     @Autowired
     private SignService signService;
@@ -43,7 +41,7 @@ public class SendMessageController {
     @Autowired
     private MessageRepository messageRepository;
 
-    @PostMapping
+    @Override
     public void sendMessage(@RequestBody SendMessageFrontToBack sendMessageFrontToBack) throws Exception {
 
         IncomingMessage incomingMessage = new IncomingMessage();

@@ -1,8 +1,7 @@
-package fr.epsi.jconte.p2pChatSpring.controller.front;
+package fr.epsi.jconte.p2pChatSpring.controller.front.impl;
 
+import fr.epsi.jconte.p2pChatSpring.controller.front.NetworkInterfaceApi;
 import fr.epsi.jconte.p2pChatSpring.dto.NetworkAndAdress;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.InetAddress;
@@ -13,10 +12,9 @@ import java.util.Enumeration;
 import java.util.List;
 
 @RestController
-@RequestMapping("/chat/network")
-public class NetworkInterfaceController {
+public class NetworkInterfaceController implements NetworkInterfaceApi {
 
-    @GetMapping
+    @Override
     public List<NetworkAndAdress> getNetwork() throws SocketException {
         List<NetworkAndAdress> networkAndAdresses = new ArrayList<>();
         Enumeration<NetworkInterface> networkInterfaceEnumeration = NetworkInterface.getNetworkInterfaces();

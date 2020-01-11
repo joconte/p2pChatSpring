@@ -1,5 +1,6 @@
-package fr.epsi.jconte.p2pChatSpring.controller.front;
+package fr.epsi.jconte.p2pChatSpring.controller.front.impl;
 
+import fr.epsi.jconte.p2pChatSpring.controller.front.ScanningOnlineApi;
 import fr.epsi.jconte.p2pChatSpring.dto.NetworkAndAdressChoice;
 import fr.epsi.jconte.p2pChatSpring.dto.OnlineMessage;
 import fr.epsi.jconte.p2pChatSpring.dto.PersonneWithIpAdress;
@@ -17,13 +18,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/chat/scan")
-public class ScanningOnlineController {
+public class ScanningOnlineController implements ScanningOnlineApi {
 
     @Autowired
     private PersonneRepository personneRepository;
 
-    @PostMapping
+    @Override
     public List<PersonneWithIpAdress> scan(@RequestBody NetworkAndAdressChoice networkAndAdressChoice) throws SocketException, UnknownHostException {
         List<PersonneWithIpAdress> personnes = new ArrayList<>();
         InetAddress myInetAddress = InetAddress.getLocalHost();
@@ -101,8 +101,8 @@ public class ScanningOnlineController {
                         InetAddress address = InetAddress.getByAddress(ip);
 
                         // If my ip address I ignore it
-                        if (address.equals(myIp))
-                            return;
+                        //if (address.equals(myIp))
+                        //    return;
 
                         try {
                             SocketAddress sockaddr = new InetSocketAddress(address, port);
