@@ -22,5 +22,5 @@ public interface IScanningOnlineController {
      * @throws UnknownHostException
      */
     @PostMapping
-    List<PersonneWithIpAdress> scan(@RequestBody NetworkAndAdressChoice networkAndAdressChoice) throws SocketException, UnknownHostException;
+    List<PersonneWithIpAdress> scan(@RequestBody NetworkAndAdressChoice networkAndAdressChoice) throws SocketException, UnknownHostException, InterruptedException;
 }
