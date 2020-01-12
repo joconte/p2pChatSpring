@@ -10,6 +10,11 @@ import java.util.List;
 @RequestMapping("/chat/network")
 public interface INetworkInterfaceController {
 
+    /**
+     * Permet de retourner la liste des différents réseaux disponibles.
+     * @return
+     * @throws SocketException
+     */
     @GetMapping
     List<NetworkAndAdress> getNetwork() throws SocketException;
 }

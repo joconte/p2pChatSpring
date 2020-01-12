@@ -30,10 +30,17 @@ public class ConversationController implements IConversationController {
         List<Message> cleanMessages = new ArrayList<>();
         List<Message> encryptedMessages = messageRepository.findAllByPersonne_Id(idPersonne);
 
+        // Pour chaque message chiffré
         for (Message encryptedMessage : encryptedMessages) {
+
+            // On déchiffre le message à l'aide de notre clé privée
             encryptedMessage.setContenu(decryptService.decryptString(encryptedMessage.getContenu(), getPrivateKeyService.getPrivateKeyFromResource("secret.key")));
+
+            // On ajoute le message dans notre liste de message déchiffré
             cleanMessages.add(encryptedMessage);
         }
+
+        // On retourne la liste de message déchiffré.
         return cleanMessages;
     }
 }

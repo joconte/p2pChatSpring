@@ -13,6 +13,14 @@ import java.util.List;
 @RequestMapping("/chat/scan")
 public interface IScanningOnlineController {
 
+    /**
+     * Permet de scanner le réseau pour voir si un d'autre pairs sont connectés.
+     * Retourne les pairs connectés s'il y en a.
+     * @param networkAndAdressChoice
+     * @return
+     * @throws SocketException
+     * @throws UnknownHostException
+     */
     @PostMapping
     List<PersonneWithIpAdress> scan(@RequestBody NetworkAndAdressChoice networkAndAdressChoice) throws SocketException, UnknownHostException;
 }

@@ -25,34 +25,14 @@ public class ScanningOnlineController implements IScanningOnlineController {
 
     @Override
     public List<PersonneWithIpAdress> scan(@RequestBody NetworkAndAdressChoice networkAndAdressChoice) throws SocketException, UnknownHostException {
+
         List<PersonneWithIpAdress> personnes = new ArrayList<>();
-        InetAddress myInetAddress = InetAddress.getLocalHost();
-        Enumeration<NetworkInterface> networkInterfaceEnumeration = NetworkInterface.getNetworkInterfaces();
-        while (networkInterfaceEnumeration.hasMoreElements()) {
-            NetworkInterface networkInterface = networkInterfaceEnumeration.nextElement();
-            if (!networkInterface.getDisplayName().equals(networkAndAdressChoice.getNetworkName())) {
-                continue;
-            }
 
-            Enumeration<InetAddress> inetAddressEnumeration = networkInterface.getInetAddresses();
-
-            while (inetAddressEnumeration.hasMoreElements()) {
-                InetAddress inetAddress = inetAddressEnumeration.nextElement();
-                if (!inetAddress.getHostAddress().equals(networkAndAdressChoice.getIpAddress())) {
-                    continue;
-                }
-
-                myInetAddress = inetAddress;
-            }
-        }
+        InetAddress myInetAddress = getInetAddressFrom(networkAndAdressChoice);
 
         List<InetAddress> inetAddresses = getNetworkIPs(8080, myInetAddress);
 
         for (InetAddress inetAddress : inetAddresses) {
-
-            // If my ip address I ignore it
-            //if (address.equals(myIp))
-            //  return;
 
             final String uri = "http://" + inetAddress.getHostAddress() + ":8080/chat/online";
 
@@ -76,33 +56,23 @@ public class ScanningOnlineController implements IScanningOnlineController {
         return personnes;
     }
 
-    private List<InetAddress> getNetworkIPs(final int port, InetAddress myIp) throws SocketException {
+    private List<InetAddress> getNetworkIPs(final int port, final InetAddress myIp) throws SocketException {
 
         final List<InetAddress> inetAddresses = new ArrayList<>();
-        final byte[] ip;
-        //final InetAddress myIp;
-        try {
-            //ip = InetAddress.getLocalHost().getAddress();
-            ip = myIp.getAddress();
-            //myIp = InetAddress.getLocalHost();
-        } catch (Exception e) {
-            return inetAddresses;     // exit method, otherwise "ip might not have been initialized"
-        }
+        final byte[] ip = myIp.getAddress();
 
         for(int i=1;i<=254;i++) {
             final int j = i;  // i as non-final variable cannot be referenced from inner class
             new Thread(new Runnable() {   // new thread for parallel execution
                 public void run() {
                     try {
-                        boolean exists = false;
-                        byte newByte = (byte)j;
 
                         ip[3] = (byte)j;
                         InetAddress address = InetAddress.getByAddress(ip);
 
                         // If my ip address I ignore it
-                        //if (address.equals(myIp))
-                        //    return;
+                        if (address.equals(myIp))
+                          return;
 
                         try (Socket sock = new Socket();) {
                             SocketAddress sockaddr = new InetSocketAddress(address, port);
@@ -123,5 +93,28 @@ public class ScanningOnlineController implements IScanningOnlineController {
             }).start();     // dont forget to start the thread
         }
         return inetAddresses;
+    }
+
+    private InetAddress getInetAddressFrom(NetworkAndAdressChoice networkAndAdressChoice) throws UnknownHostException, SocketException {
+
+        Enumeration<NetworkInterface> networkInterfaceEnumeration = NetworkInterface.getNetworkInterfaces();
+        while (networkInterfaceEnumeration.hasMoreElements()) {
+            NetworkInterface networkInterface = networkInterfaceEnumeration.nextElement();
+            if (!networkInterface.getDisplayName().equals(networkAndAdressChoice.getNetworkName())) {
+                continue;
+            }
+
+            Enumeration<InetAddress> inetAddressEnumeration = networkInterface.getInetAddresses();
+
+            while (inetAddressEnumeration.hasMoreElements()) {
+                InetAddress inetAddress = inetAddressEnumeration.nextElement();
+                if (!inetAddress.getHostAddress().equals(networkAndAdressChoice.getIpAddress())) {
+                    continue;
+                }
+
+                return inetAddress;
+            }
+        }
+        return null;
     }
 }
