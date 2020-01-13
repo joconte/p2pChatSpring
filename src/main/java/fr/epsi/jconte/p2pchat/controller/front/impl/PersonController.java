@@ -5,6 +5,7 @@ import fr.epsi.jconte.p2pchat.dto.PersonIdAndName;
 import fr.epsi.jconte.p2pchat.model.Personne;
 import fr.epsi.jconte.p2pchat.repository.PersonneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class PersonController implements IPersonController {
     private PersonneRepository personneRepository;
 
     @Override
-    public void changeName(PersonIdAndName personIdAndName) {
+    public void changeName(@RequestBody PersonIdAndName personIdAndName) {
 
         Optional<Personne> optionalPersonne = personneRepository.findById(personIdAndName.getId());
 
