@@ -29,9 +29,7 @@ public class PublicKeyConversionService implements IPublicKeyConversionService {
 
     @Override
     public String getBase64(PublicKey publicKey) {
-
         byte[] encodedPublicKey = publicKey.getEncoded();
-        String b64PublicKey = Base64.getEncoder().encodeToString(encodedPublicKey);
-        return b64PublicKey;
+        return Base64.getEncoder().encodeToString(encodedPublicKey);
     }
 }
