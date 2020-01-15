@@ -9,6 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +32,7 @@ public class ConversationController implements IConversationController {
     private IGetPrivateKeyService getPrivateKeyService;
 
     @Override
-    public List<Message> getCleanMessageFromPersonne(@PathVariable Long idPersonne) throws Exception {
+    public List<Message> getCleanMessageFromPersonne(@PathVariable Long idPersonne) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException {
 
         List<Message> cleanMessages = new ArrayList<>();
         List<Message> encryptedMessages = messageRepository.findAllByPersonne_Id(idPersonne);

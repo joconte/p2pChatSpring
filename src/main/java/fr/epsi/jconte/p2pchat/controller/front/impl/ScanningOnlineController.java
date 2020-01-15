@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 public class ScanningOnlineController implements IScanningOnlineController {
@@ -30,7 +29,7 @@ public class ScanningOnlineController implements IScanningOnlineController {
     private PersonneRepository personneRepository;
 
     @Override
-    public List<PersonneWithIpAdress> scan(@RequestBody NetworkAndAdressChoice networkAndAdressChoice) throws SocketException, UnknownHostException, InterruptedException {
+    public List<PersonneWithIpAdress> scan(@RequestBody NetworkAndAdressChoice networkAndAdressChoice) throws SocketException {
 
         List<PersonneWithIpAdress> personnes = new ArrayList<>();
 
@@ -62,7 +61,7 @@ public class ScanningOnlineController implements IScanningOnlineController {
         return personnes;
     }
 
-    private List<InetAddress> getNetworkIPs(final int port, final InetAddress myIp) throws SocketException, InterruptedException {
+    private List<InetAddress> getNetworkIPs(final int port, final InetAddress myIp) {
 
         final List<InetAddress> inetAddresses = new ArrayList<>();
         final byte[] ip = myIp.getAddress();
@@ -73,43 +72,18 @@ public class ScanningOnlineController implements IScanningOnlineController {
             final int j = i;  // i as non-final variable cannot be referenced from inner class
             es.execute(new Runnable() {   // new thread for parallel execution
                 public void run() {
-                    try {
-                        ip[3] = (byte)j;
-                        InetAddress address = InetAddress.getByAddress(ip);
-                        //LOGGER.info("Trying this ip : " + address);
-
-                        // If my ip address I ignore it
-                        if (address.equals(myIp))
-                            return;
-
-                        try (Socket sock = new Socket();) {
-                            SocketAddress sockaddr = new InetSocketAddress(address, port);
-                            // Create an unbound socket
-
-                            // This method will block no more than timeoutMs.
-                            // If the timeout occurs, SocketTimeoutException is thrown.
-                            int timeoutMs = 2000;   // 2 seconds
-                            sock.connect(sockaddr, timeoutMs);
-                            //LOGGER.info("Ok found this ip : " + address);
-                            inetAddresses.add(address);
-                        } catch(IOException e) {
-                            //LOGGER.info("Timeout for this ip : " + address);
-                            // Handle exception
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    connectToSocket(port, myIp, ip, j, inetAddresses);
                 }
             });
         }
         es.shutdown();
-        boolean finished = es.awaitTermination(1, TimeUnit.MINUTES);
+        //boolean finished = es.awaitTermination(1, TimeUnit.MINUTES);
 
-        //LOGGER.info(inetAddresses);
+        LOGGER.info(inetAddresses);
         return inetAddresses;
     }
 
-    private InetAddress getInetAddressFrom(NetworkAndAdressChoice networkAndAdressChoice) throws UnknownHostException, SocketException {
+    private InetAddress getInetAddressFrom(NetworkAndAdressChoice networkAndAdressChoice) throws SocketException {
 
         Enumeration<NetworkInterface> networkInterfaceEnumeration = NetworkInterface.getNetworkInterfaces();
         while (networkInterfaceEnumeration.hasMoreElements()) {
@@ -130,5 +104,35 @@ public class ScanningOnlineController implements IScanningOnlineController {
             }
         }
         return null;
+    }
+
+    public void connectToSocket(final int port, final InetAddress myIp, final byte[] ip, final int j,  final List<InetAddress> inetAddresses)
+    {
+        try {
+            ip[3] = (byte)j;
+            InetAddress address = InetAddress.getByAddress(ip);
+            LOGGER.info("Trying this ip : " + address);
+
+            // If my ip address I ignore it
+            if (address.equals(myIp))
+                return;
+
+            try (Socket sock = new Socket();) {
+                SocketAddress sockaddr = new InetSocketAddress(address, port);
+                // Create an unbound socket
+
+                // This method will block no more than timeoutMs.
+                // If the timeout occurs, SocketTimeoutException is thrown.
+                int timeoutMs = 2000;   // 2 seconds
+                sock.connect(sockaddr, timeoutMs);
+                LOGGER.info("Ok found this ip : " + address);
+                inetAddresses.add(address);
+            } catch(IOException e) {
+                LOGGER.info("Timeout for this ip : " + address);
+                // Handle exception
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

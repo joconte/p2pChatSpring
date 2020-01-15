@@ -6,6 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 @RequestMapping("/chat/conversation")
@@ -19,6 +26,6 @@ public interface IConversationController {
      */
     @GetMapping
     @RequestMapping("{idPersonne}")
-    List<Message> getCleanMessageFromPersonne(@PathVariable Long idPersonne) throws Exception;
+    List<Message> getCleanMessageFromPersonne(@PathVariable Long idPersonne) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException;
 }
 

@@ -3,8 +3,7 @@ package fr.epsi.jconte.p2pchat.service.impl;
 import fr.epsi.jconte.p2pchat.service.ISignService;
 import org.springframework.stereotype.Service;
 
-import java.security.PrivateKey;
-import java.security.Signature;
+import java.security.*;
 import java.util.Base64;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -13,7 +12,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class SignService implements ISignService {
 
     @Override
-    public String signString(String plainText, PrivateKey privateKey) throws Exception {
+    public String signString(String plainText, PrivateKey privateKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         Signature privateSignature = Signature.getInstance("SHA256withRSA");
         privateSignature.initSign(privateKey);
         privateSignature.update(plainText.getBytes(UTF_8));

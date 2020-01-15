@@ -1,6 +1,9 @@
 package fr.epsi.jconte.p2pchat.service;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.SignatureException;
 
 public interface ISignService {
 
@@ -11,5 +14,5 @@ public interface ISignService {
      * @return
      * @throws Exception
      */
-    String signString(String plainText, PrivateKey privateKey) throws Exception;
+    String signString(String plainText, PrivateKey privateKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException;
 }

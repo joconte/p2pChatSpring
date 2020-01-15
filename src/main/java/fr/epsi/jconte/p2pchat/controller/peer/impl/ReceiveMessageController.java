@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.util.Date;
 import java.util.Optional;
 
@@ -31,7 +34,7 @@ public class ReceiveMessageController implements IReceiveMessageController {
     private IPublicKeyConversionService publicKeyConversionService;
 
     @Override
-    public void receiveMessage(@RequestBody IncomingMessage incomingMessage) throws Exception {
+    public void receiveMessage(@RequestBody IncomingMessage incomingMessage) throws SignatureException, InvalidKeyException, NoSuchAlgorithmException {
 
         if (!verifyService.verifyString(incomingMessage.getSignature().getPlainText(), incomingMessage.getSignature().getSignedText(), publicKeyConversionService.getPublicKey(incomingMessage.getPublicKeyBase64()))) {
             return;

@@ -5,6 +5,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+
 @RequestMapping("/chat/send")
 public interface ISendMessageController {
 
@@ -14,5 +23,5 @@ public interface ISendMessageController {
      * @throws Exception
      */
     @PostMapping
-    void sendMessage(@RequestBody SendMessageFrontToBack sendMessageFrontToBack) throws Exception;
+    void sendMessage(@RequestBody SendMessageFrontToBack sendMessageFrontToBack) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, SignatureException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException;
 }
