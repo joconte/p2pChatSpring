@@ -15,10 +15,10 @@ public class PublicKeyConversionService implements IPublicKeyConversionService {
     public PublicKey getPublicKey(String key){
         try{
             byte[] byteKey = Base64.getDecoder().decode(key.getBytes());
-            X509EncodedKeySpec X509PUBLICKEY = new X509EncodedKeySpec(byteKey);
+            X509EncodedKeySpec x509publicKey = new X509EncodedKeySpec(byteKey);
             KeyFactory kf = KeyFactory.getInstance("RSA");
 
-            return kf.generatePublic(X509PUBLICKEY);
+            return kf.generatePublic(x509publicKey);
         }
         catch(Exception e){
             e.printStackTrace();

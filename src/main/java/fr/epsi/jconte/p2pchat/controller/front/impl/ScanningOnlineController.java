@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class ScanningOnlineController implements IScanningOnlineController {
@@ -29,7 +30,7 @@ public class ScanningOnlineController implements IScanningOnlineController {
     private PersonneRepository personneRepository;
 
     @Override
-    public List<PersonneWithIpAdress> scan(@RequestBody NetworkAndAdressChoice networkAndAdressChoice) throws SocketException {
+    public List<PersonneWithIpAdress> scan(@RequestBody NetworkAndAdressChoice networkAndAdressChoice) throws SocketException, InterruptedException {
 
         List<PersonneWithIpAdress> personnes = new ArrayList<>();
 
@@ -61,7 +62,7 @@ public class ScanningOnlineController implements IScanningOnlineController {
         return personnes;
     }
 
-    private List<InetAddress> getNetworkIPs(final int port, final InetAddress myIp) {
+    private List<InetAddress> getNetworkIPs(final int port, final InetAddress myIp) throws InterruptedException {
 
         final List<InetAddress> inetAddresses = new ArrayList<>();
         final byte[] ip = myIp.getAddress();
@@ -77,7 +78,7 @@ public class ScanningOnlineController implements IScanningOnlineController {
             });
         }
         es.shutdown();
-        //boolean finished = es.awaitTermination(1, TimeUnit.MINUTES);
+        es.awaitTermination(1, TimeUnit.MINUTES);
 
         LOGGER.info(inetAddresses);
         return inetAddresses;

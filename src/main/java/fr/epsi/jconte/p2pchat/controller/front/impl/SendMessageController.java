@@ -82,9 +82,7 @@ public class SendMessageController implements ISendMessageController {
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.postForObject(uri, incomingMessage, String.class);
 
-        //System.out.println(result);
         LOGGER.info(result);
-
 
         String encryptedMessageForMe = encryptService.encryptString(sendMessageFrontToBack.getCleanMessage(), getPublicKeyService.getPublicKeyFromResource("secret.pub"));
 
