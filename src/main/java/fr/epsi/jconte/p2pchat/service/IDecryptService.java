@@ -1,5 +1,10 @@
 package fr.epsi.jconte.p2pchat.service;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 
 public interface IDecryptService {
@@ -12,5 +17,5 @@ public interface IDecryptService {
      * @return
      * @throws Exception
      */
-    String decryptString(String cipherText, PrivateKey privateKey) throws Exception;
+    String decryptString(String cipherText, PrivateKey privateKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException;
 }

@@ -27,7 +27,6 @@ public class GetPrivateKeyService implements IGetPrivateKeyService {
         /* Generate private key. */
         PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(bytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
-        PrivateKey pvt = kf.generatePrivate(ks);
-        return pvt;
+        return kf.generatePrivate(ks);
     }
 }

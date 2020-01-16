@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+
 @RequestMapping("/chat/receive")
 public interface IReceiveMessageController {
 
@@ -15,5 +19,5 @@ public interface IReceiveMessageController {
      * @throws Exception
      */
     @PostMapping
-    void receiveMessage(@RequestBody IncomingMessage incomingMessage) throws Exception;
+    void receiveMessage(@RequestBody IncomingMessage incomingMessage) throws SignatureException, InvalidKeyException, NoSuchAlgorithmException;
 }

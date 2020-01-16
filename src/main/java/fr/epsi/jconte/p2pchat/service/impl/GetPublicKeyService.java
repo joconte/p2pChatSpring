@@ -27,8 +27,7 @@ public class GetPublicKeyService implements IGetPublicKeyService {
         /* Generate public key. */
         X509EncodedKeySpec ks = new X509EncodedKeySpec(bytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
-        PublicKey pub = kf.generatePublic(ks);
 
-        return pub;
+        return kf.generatePublic(ks);
     }
 }

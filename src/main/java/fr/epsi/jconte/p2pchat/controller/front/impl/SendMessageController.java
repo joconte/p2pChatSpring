@@ -9,16 +9,27 @@ import fr.epsi.jconte.p2pchat.model.Personne;
 import fr.epsi.jconte.p2pchat.repository.MessageRepository;
 import fr.epsi.jconte.p2pchat.repository.PersonneRepository;
 import fr.epsi.jconte.p2pchat.service.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.Optional;
 
 @RestController
 public class SendMessageController implements ISendMessageController {
+
+    public static final Logger LOGGER = Logger.getLogger(SendMessageController.class);
 
     @Autowired
     private ISignService signService;
@@ -42,7 +53,7 @@ public class SendMessageController implements ISendMessageController {
     private MessageRepository messageRepository;
 
     @Override
-    public void sendMessage(@RequestBody SendMessageFrontToBack sendMessageFrontToBack) throws Exception {
+    public void sendMessage(@RequestBody SendMessageFrontToBack sendMessageFrontToBack) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, SignatureException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException {
 
         IncomingMessage incomingMessage = new IncomingMessage();
 
@@ -71,7 +82,7 @@ public class SendMessageController implements ISendMessageController {
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.postForObject(uri, incomingMessage, String.class);
 
-        System.out.println(result);
+        LOGGER.info(result);
 
         String encryptedMessageForMe = encryptService.encryptString(sendMessageFrontToBack.getCleanMessage(), getPublicKeyService.getPublicKeyFromResource("secret.pub"));
 
